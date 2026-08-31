@@ -87,9 +87,23 @@ desincronizan: al cambiar el encabezado en la portada, basta volver a generar.
 
 El panal es una rejilla hexagonal en coordenadas axiales `(q, r)`: `q` y `r` en
 `scripts/equipo-datos.mjs` colocan a cada persona. El centro lo ocupa el hexágono
-de marca y una celda rayada completa el círculo. Al apuntar un hexágono, ese crece
-y sus seis vecinos crecen menos — la distancia se calcula sobre la rejilla, no por
-posición en pantalla.
+de marca y una celda rayada completa el círculo.
+
+El relieve es un **campo continuo**, no tres estados fijos. Cada hexágono recibe
+una variable CSS `--f` de 0 a 1 según lo cerca que esté el puntero de *su* centro,
+con una caída gaussiana (1 en el centro, ~0.44 a un hexágono de distancia, casi 0
+a dos). De `--f` salen a la vez el tamaño, el color de la foto y el grosor y color
+del trazo, así que el énfasis se reparte entre los vecinos y se mueve con el ratón.
+Entre dos hexágonos, ambos suben por igual.
+
+Tres números en `scripts/equipo.js` gobiernan la sensación —`ALCANCE` (qué tan
+lejos llega), `SUAVIDAD` (cuánto persigue al objetivo en cada cuadro)— y el
+crecimiento máximo, que está en el `transform` de `.celda` en `scripts/equipo.css`.
+
+Los centros se calculan con la misma fórmula que los coloca en el CSS, no midiendo
+el DOM: las celdas están escaladas y medirlas devolvería tamaños que cambian con el
+propio efecto. Con pantalla táctil o con «menos movimiento» activado el script no
+toma el control y queda un realce simple del CSS.
 
 Sin JavaScript los hexágonos siguen siendo enlaces al **directorio** de abajo, que
 lleva los teléfonos, WhatsApp y correos reales. Esa lista es también lo que leen
