@@ -275,7 +275,9 @@ section[id],div[id]{scroll-margin-top:120px}
 .pie__col a{font-size:.9375rem;color:var(--texto-2);min-height:34px;display:inline-flex;align-items:center}
 .pie__col a:hover{color:var(--ambar)}
 .pie__rif{font-size:.875rem;line-height:1.6;color:var(--texto-4);margin-top:4px}
-.pie__base{padding-bottom:30px}
+/* El hueco de abajo deja libre el boton flotante de Daniel, que en movil
+   flota sobre la barra de contacto y tapaba la linea de creditos. */
+.pie__base{padding-bottom:88px}
 .pie__linea{height:4px;background:repeating-linear-gradient(90deg,var(--ambar) 0 40px,transparent 40px 80px);margin-bottom:18px}
 .pie__base small{font-size:.75rem;color:#55534F}
 
@@ -360,6 +362,9 @@ body{padding-bottom:calc(58px + env(safe-area-inset-bottom))}
   .tel-cab{display:inline-flex}
   .barra-movil{display:none}
   body{padding-bottom:0}
+  /* En escritorio el boton de Daniel se ancla abajo a la derecha: se le reserva
+     ese ancho para que la linea de creditos nunca quede debajo. */
+  .pie__base{padding-bottom:34px;padding-right:calc(var(--gutter) + 190px)}
   .pie__rejilla{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @media (min-width:1024px){
@@ -415,6 +420,7 @@ body{padding-bottom:calc(58px + env(safe-area-inset-bottom))}
         <li><a href="#obras">Obras</a></li>
         <li><a href="#planta">Planta</a></li>
         <li><a href="#preguntas">Preguntas</a></li>
+        <li><a href="equipo.html">Equipo</a></li>
       </ul>
     </nav>
 
@@ -443,6 +449,7 @@ body{padding-bottom:calc(58px + env(safe-area-inset-bottom))}
       <li><a href="#obras">Obras</a></li>
       <li><a href="#planta">Planta</a></li>
       <li><a href="#preguntas">Preguntas</a></li>
+      <li><a href="equipo.html">Equipo</a></li>
     </ul>
   </nav>
   <div class="menu__pie">
@@ -674,6 +681,7 @@ body{padding-bottom:calc(58px + env(safe-area-inset-bottom))}
       <a href="tel:+584141745646">Tel. (0414) 174-5646</a>
       <a href="https://wa.me/584141745646" rel="noopener">WhatsApp 0414 174 5646</a>
       <a href="https://www.instagram.com/agrepaasfalcem/" rel="noopener">Instagram @agrepaasfalcem</a>
+      <a href="equipo.html">Equipo y contactos directos</a>
       <a href="mailto:correo@dominio.com">[correo@dominio.com]</a>
       <p class="pie__rif">
         Inversiones AGREPA, C.A. · RIF J-30807342-3<br>

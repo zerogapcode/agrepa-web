@@ -14,16 +14,29 @@ en GitHub Pages con cada `push` a `main`.
 ## Estructura
 
 ```
-index.html      La página completa (CSS y JS embebidos; una sola petición)
+index.html      La portada (CSS y JS embebidos; una sola petición)
+equipo.html     Equipo y contactos directos — GENERADA, no editar a mano
 404.html        Página de error con la identidad de la marca
-img/            Todas las imágenes: logo, fotos, favicon, avatar del bot
+img/            Imágenes del sitio
+img/equipo/     Retratos del personal + avatar genérico
 js/config.js    URL del Worker de Cloudflare + memoria de conversación del bot
 robots.txt      Permite indexación, apunta al sitemap
-sitemap.xml     Una URL por ahora; agregar aquí cada página nueva
-scripts/        Utilidades de mantenimiento
+sitemap.xml     Una entrada por página; agregar aquí cada página nueva
+scripts/        Datos, generador, validador y utilidades
 docs/           Notas técnicas (bloque del asistente Daniel Bot)
 .github/workflows/static.yml   Despliegue automático a GitHub Pages
 ```
+
+## Antes de publicar
+
+```bash
+node scripts/validar.mjs
+```
+
+Revisa las tres páginas: etiquetas HTML balanceadas, llaves de CSS, JSON-LD que
+parsee, que exista cada archivo referenciado y que el JavaScript embebido compile.
+Termina con código de salida distinto de cero si algo falla, así que sirve igual
+en un hook de git.
 
 ## Ver el sitio en local
 
@@ -55,6 +68,52 @@ Después, del lado del registrador y de GitHub:
 
 El script es repetible: lee el dominio actual del `<link rel="canonical">`, así que puede
 correrse otra vez para corregir o cambiar de dominio.
+
+---
+
+## La página de equipo
+
+`equipo.html` **se genera**; editarla a mano se pierde en la siguiente corrida.
+Los datos de las personas viven en un solo archivo:
+
+```bash
+$EDITOR scripts/equipo-datos.mjs     # nombres, teléfonos, correos, cargos, fotos
+node scripts/generar-equipo.mjs      # reescribe equipo.html
+```
+
+El generador toma el encabezado, el menú móvil, el pie, la barra de contacto y el
+widget de Daniel Bot **desde `index.html`**, de modo que las dos páginas no se
+desincronizan: al cambiar el encabezado en la portada, basta volver a generar.
+
+El panal es una rejilla hexagonal en coordenadas axiales `(q, r)`: `q` y `r` en
+`scripts/equipo-datos.mjs` colocan a cada persona. El centro lo ocupa el hexágono
+de marca y una celda rayada completa el círculo. Al apuntar un hexágono, ese crece
+y sus seis vecinos crecen menos — la distancia se calcula sobre la rejilla, no por
+posición en pantalla.
+
+Sin JavaScript los hexágonos siguen siendo enlaces al **directorio** de abajo, que
+lleva los teléfonos, WhatsApp y correos reales. Esa lista es también lo que leen
+los buscadores.
+
+### Datos del personal: qué falta confirmar
+
+Todo salió de `personal.pages`. Tres cosas quedaron marcadas:
+
+- [ ] **Cargos.** El documento no trae ninguno. El campo `cargo` está vacío para
+      las 17 personas; al rellenarlo aparece bajo el nombre en las tres vistas.
+- [ ] **La foto de Roselis Orama es la misma de Kelin Cardozo** en el documento
+      original (comprobado comparando los píxeles). Va con el avatar genérico
+      hasta tener la suya: publicar la cara de otra persona bajo su nombre sería
+      un error, no un detalle.
+- [ ] **Dos correos no corresponden al nombre:** Victor Tachon figura con
+      `corihernandez.2780@gmail.com` y Jimmy Machado con
+      `nanniegutierrez@gmail.com`. Puede ser correcto, pero conviene confirmarlo
+      antes de que alguien escriba a la persona equivocada.
+
+Además: son **teléfonos y correos personales** publicados en una página abierta.
+Quedan expuestos a robots de spam. Si el cliente prefiere, se pueden cambiar por
+extensiones y correos corporativos sin tocar el diseño — solo cambia
+`scripts/equipo-datos.mjs`.
 
 ---
 
@@ -92,8 +151,11 @@ Contenido y rendimiento:
 
 ## Notas de mantenimiento
 
-- El CSS y el JS viven dentro de `index.html` a propósito: el sitio es una sola página y
-  así carga en una sola petición, sin render bloqueado.
+- El CSS y el JS viven dentro del HTML a propósito: así cada página carga en una sola
+  petición, sin render bloqueado. El precio es que `equipo.html` arrastra el CSS
+  completo de la portada, incluido el que no usa (~10 KB sin comprimir, ~2 KB con
+  gzip). Si el sitio llega a tres o cuatro páginas, conviene extraer el CSS común
+  a `css/base.css`.
 - El diseño es **mobile-first** — la mayoría de quienes lo aprueban lo ven en el teléfono.
   Probar siempre a 375 px de ancho antes de dar algo por terminado.
 - Los hexágonos del fondo son SVG sin relleno con parallax por scroll; el grosor del trazo
