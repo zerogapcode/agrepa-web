@@ -1416,12 +1416,21 @@ a.celda{cursor:pointer;-webkit-tap-highlight-color:transparent}
       if (!document.hidden) ultimaActividad = Date.now();
     });
 
-    window.setInterval(function () {
-      if (document.hidden || !panalVisible || puntero || pulsoInicio) return;
-      if (Date.now() - ultimaActividad < PULSO_ESPERA) return;
-      ultimaActividad = Date.now();
-      lanzarPulso();
-    }, 500);
+    // Se agenda el siguiente pulso al momento exacto en vez de sondear cada
+    // pocos cientos de milisegundos: sondeando, la cadencia se iba hasta medio
+    // segundo. Si al llegar la hora las condiciones no se cumplen, se reintenta.
+    var temporizador = null;
+    (function programar(retraso) {
+      window.clearTimeout(temporizador);
+      temporizador = window.setTimeout(function () {
+        if (document.hidden || !panalVisible || puntero || pulsoInicio) { programar(500); return; }
+        var quieto = Date.now() - ultimaActividad;
+        if (quieto < PULSO_ESPERA) { programar(PULSO_ESPERA - quieto); return; }
+        ultimaActividad = Date.now();
+        lanzarPulso();
+        programar(PULSO_ESPERA);
+      }, retraso);
+    })(PULSO_PRIMER);
   }
 
   // Teclado: el foco hace las veces de puntero, centrado en esa celda.
