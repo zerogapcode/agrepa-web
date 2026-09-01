@@ -578,6 +578,18 @@ a.celda{cursor:pointer;-webkit-tap-highlight-color:transparent}
 </head>
 <body>
 
+<div class="hexes" aria-hidden="true">
+  <span class="hex hex--g" style="top:20%;left:68%" data-vel="0.12"><span class="hex__foto" style="background-image:url(img/hex-obra.jpg);background-size:auto 190%;background-position:38% 50%"></span><svg viewBox="0 0 100 115.47" aria-hidden="true"><polygon points="50,0 100,28.87 100,86.6 50,115.47 0,86.6 0,28.87"></polygon></svg></span>
+  <span class="hex hex--g" style="top:48%;left:-7%" data-vel="0.12"><svg viewBox="0 0 100 115.47" aria-hidden="true"><polygon points="50,0 100,28.87 100,86.6 50,115.47 0,86.6 0,28.87"></polygon></svg></span>
+  <span class="hex hex--g" style="top:78%;left:56%" data-vel="0.12"><svg viewBox="0 0 100 115.47" aria-hidden="true"><polygon points="50,0 100,28.87 100,86.6 50,115.47 0,86.6 0,28.87"></polygon></svg></span>
+  <span class="hex hex--m" style="top:26%;left:14%" data-vel="0.28"><svg viewBox="0 0 100 115.47" aria-hidden="true"><polygon points="50,0 100,28.87 100,86.6 50,115.47 0,86.6 0,28.87"></polygon></svg></span>
+  <span class="hex hex--m" style="top:52%;left:78%" data-vel="0.28"><svg viewBox="0 0 100 115.47" aria-hidden="true"><polygon points="50,0 100,28.87 100,86.6 50,115.47 0,86.6 0,28.87"></polygon></svg></span>
+  <span class="hex hex--m" style="top:72%;left:6%" data-vel="0.28"><span class="hex__foto" style="background-image:url(img/hex-compactadora.jpg);background-size:auto 150%;background-position:44% 64%"></span><svg viewBox="0 0 100 115.47" aria-hidden="true"><polygon points="50,0 100,28.87 100,86.6 50,115.47 0,86.6 0,28.87"></polygon></svg></span>
+  <span class="hex hex--p" style="top:22%;left:44%" data-vel="0.45"><svg viewBox="0 0 100 115.47" aria-hidden="true"><polygon points="50,0 100,28.87 100,86.6 50,115.47 0,86.6 0,28.87"></polygon></svg></span>
+  <span class="hex hex--p" style="top:38%;left:26%" data-vel="0.45"><svg viewBox="0 0 100 115.47" aria-hidden="true"><polygon points="50,0 100,28.87 100,86.6 50,115.47 0,86.6 0,28.87"></polygon></svg></span>
+  <span class="hex hex--p" style="top:56%;left:84%" data-vel="0.45"><span class="hex__foto" style="background-image:url(img/hex-rodillo.jpg);background-size:auto 190%;background-position:40% 62%"></span><svg viewBox="0 0 100 115.47" aria-hidden="true"><polygon points="50,0 100,28.87 100,86.6 50,115.47 0,86.6 0,28.87"></polygon></svg></span>
+</div>
+
 <a class="saltar lbl" href="#contenido">Saltar al contenido</a>
 
 <!-- ================= CABECERA ================= -->
@@ -1194,6 +1206,45 @@ a.celda{cursor:pointer;-webkit-tap-highlight-color:transparent}
   var alCambiar = function (e) { if (e.matches) { set(false); } };
   if (mq.addEventListener) { mq.addEventListener('change', alCambiar); }
   else if (mq.addListener) { mq.addListener(alCambiar); }
+})();
+</script>
+
+<script>
+(function () {
+  var hexes = Array.prototype.slice.call(document.querySelectorAll('.hex'));
+  if (!hexes.length) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  var piezas = hexes.map(function (el) {
+    return {
+      el: el,
+      vel: parseFloat(el.getAttribute('data-vel')) || 0
+    };
+  });
+
+  var pendiente = false;
+
+  function pintar() {
+    pendiente = false;
+    var y = window.pageYOffset || document.documentElement.scrollTop || 0;
+    for (var i = 0; i < piezas.length; i++) {
+      var p = piezas[i];
+      // se desplazan hacia abajo un % del scroll: cuanto mas se retrasan,
+      // mas lento se ven en pantalla (mas lejos)
+      p.el.style.transform = 'translate3d(0,' + (y * p.vel).toFixed(1) + 'px,0)';
+    }
+  }
+
+  function alHacerScroll() {
+    if (!pendiente) {
+      pendiente = true;
+      window.requestAnimationFrame(pintar);
+    }
+  }
+
+  window.addEventListener('scroll', alHacerScroll, { passive: true });
+  window.addEventListener('resize', alHacerScroll, { passive: true });
+  pintar();
 })();
 </script>
 

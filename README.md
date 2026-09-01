@@ -81,9 +81,10 @@ $EDITOR scripts/equipo-datos.mjs     # nombres, teléfonos, correos, cargos, fot
 node scripts/generar-equipo.mjs      # reescribe equipo.html
 ```
 
-El generador toma el encabezado, el menú móvil, el pie, la barra de contacto y el
-widget de Daniel Bot **desde `index.html`**, de modo que las dos páginas no se
-desincronizan: al cambiar el encabezado en la portada, basta volver a generar.
+El generador toma el encabezado, el menú móvil, el pie, la barra de contacto, el
+fondo de hexágonos con parallax y el widget de Daniel Bot **desde `index.html`**,
+de modo que las dos páginas no se desincronizan: al cambiar el encabezado en la
+portada, basta volver a generar.
 
 El panal es una rejilla hexagonal en coordenadas axiales `(q, r)`: `q` y `r` en
 `scripts/equipo-datos.mjs` colocan a cada persona. El centro lo ocupa el hexágono

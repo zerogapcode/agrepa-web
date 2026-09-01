@@ -34,11 +34,13 @@ const e164 = tel => '+58' + tel.replace(/\D/g, '').replace(/^0/, '');
 /* ---------- partes compartidas, tomadas de index.html ---------- */
 
 const estilos     = trozo('<style>', '</style>');
+const fondoHex    = trozo('<div class="hexes"', '</div>');
 const cabecera    = trozo('<header class="cabecera">', '</header>');
 const menuMovil   = trozo('<!-- Menú móvil -->', '</div>\n\n<main');
 const pie         = trozo('<footer class="pie">', '</footer>');
 const barraMovil  = trozo('<!-- ================= BARRA MÓVIL ================= -->\n<div class="barra-movil"', '</div>');
 const jsMenu      = trozo('<script>\n(function () {\n  var menu = document.getElementById(\'menuMovil\');', '</script>');
+const jsParallax  = trozo('<script>\n(function () {\n  var hexes =', '</script>');
 const danielBot   = trozo('<!-- ================= DANIEL BOT', '</script>\n\n</body>', false);
 
 // En esta pagina los enlaces del menu deben volver a la portada.
@@ -165,6 +167,8 @@ ${cssEquipo}</style>
 </head>
 <body>
 
+${fondoHex}
+
 <a class="saltar lbl" href="#contenido">Saltar al contenido</a>
 
 <!-- ================= CABECERA ================= -->
@@ -218,6 +222,8 @@ ${jsonLd}
 </script>
 
 ${jsMenu}
+
+${jsParallax}
 
 <script>
 ${jsEquipo}</script>
