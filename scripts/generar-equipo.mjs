@@ -43,6 +43,12 @@ const jsMenu      = trozo('<script>\n(function () {\n  var menu = document.getEl
 const jsParallax  = trozo('<script>\n(function () {\n  var hexes =', '</script>');
 const danielBot   = trozo('<!-- ================= DANIEL BOT', '</script>\n\n</body>', false);
 
+/* El hexagono grande con foto se cruzaba con el panal: en la portada esta a la
+   altura del hero, pero aqui esa franja la ocupa la colmena. Se baja a la altura
+   del directorio, donde no compite. Solo en esta pagina — en index.html sigue
+   donde estaba. Medido: cero solape con el panal a 1440px y a 390px. */
+const bajarHexGrande = html => html.replace('style="top:20%;left:68%"', 'style="top:64%;left:70%"');
+
 // En esta pagina los enlaces del menu deben volver a la portada.
 const aPortada = html => html
   .replace(/href="#(servicios|obras|planta|preguntas|presupuesto|inicio)"/g, 'href="index.html#$1"')
@@ -167,7 +173,7 @@ ${cssEquipo}</style>
 </head>
 <body>
 
-${fondoHex}
+${bajarHexGrande(fondoHex)}
 
 <a class="saltar lbl" href="#contenido">Saltar al contenido</a>
 

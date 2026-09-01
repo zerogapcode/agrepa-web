@@ -86,6 +86,11 @@ fondo de hexágonos con parallax y el widget de Daniel Bot **desde `index.html`*
 de modo que las dos páginas no se desincronizan: al cambiar el encabezado en la
 portada, basta volver a generar.
 
+La única pieza del fondo que cambia aquí es el hexágono grande con foto: en la
+portada vive a la altura del hero, pero en esta página esa franja la ocupa la
+colmena, así que el generador lo baja a la altura del directorio
+(`bajarHexGrande`). En `index.html` sigue donde estaba.
+
 El panal es una rejilla hexagonal en coordenadas axiales `(q, r)`: `q` y `r` en
 `scripts/equipo-datos.mjs` colocan a cada persona. El centro lo ocupa el hexágono
 de marca y una celda rayada completa el círculo.
