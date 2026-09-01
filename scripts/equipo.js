@@ -10,10 +10,19 @@
       q: +el.getAttribute('data-q'),
       r: +el.getAttribute('data-r'),
       x: +el.getAttribute('data-q') + (+el.getAttribute('data-r')) / 2,
-      f: 0,   // valor pintado ahora
-      obj: 0, // valor al que se dirige
+      f: 0,   // relieve del puntero: valor pintado ahora
+      obj: 0, // relieve del puntero: valor al que se dirige
+      p: 0,   // aporte de la onda
       z: -1
     };
+  });
+
+  // Distancia de cada hexagono al centro del panal, en anchos de hexagono.
+  // Sale de la misma geometria que los coloca: el desplazamiento horizontal es
+  // x anchos y el vertical 0.866 anchos por fila. Es una proporcion, asi que no
+  // cambia al redimensionar y basta calcularla una vez.
+  celdas.forEach(function (c) {
+    c.dU = Math.sqrt(c.x * c.x + (0.8660 * c.r) * (0.8660 * c.r));
   });
 
   var nomBase = lectura ? lectura.querySelector('[data-nom]').textContent : '';
@@ -44,9 +53,24 @@
   var SUAVIDAD = 0.16;  // cuanto se acerca al objetivo en cada cuadro
   // Cuanto crece el hexagono con --f = 1 se define en el CSS (.celda).
 
+  /* Onda en reposo: cada 10 s sin actividad del raton sale un pulso desde el
+     hexagono central hacia afuera. Es deliberadamente mas suave que el relieve
+     del puntero (0.10 frente a 0.26) para que se lea como respiracion y no
+     compita con el hover. */
+  var PULSO_ESPERA = 10000; // ms de quietud entre pulsos
+  var PULSO_PRIMER =  3000; // el primero llega antes, para que se descubra
+  var PULSO_DUR    =  1400; // ms que tarda el frente en cruzar la colmena
+  var PULSO_ALTO   =  0.10; // crecimiento en la cresta
+  var PULSO_ANCHO  =  0.80; // grosor del frente, en anchos de hexagono
+  var PULSO_DESDE  = -0.80; // el frente arranca fuera para que el centro entre suave
+  var PULSO_HASTA  =  4.00; // y termina pasada la ultima corona
+
   var puntero = null;   // {x, y} relativo al panal
   var cuadro = null;
   var seleccion = null;
+  var pulsoInicio = 0;                 // marca de tiempo del pulso en curso
+  var ultimaActividad = Date.now() - PULSO_ESPERA + PULSO_PRIMER;
+  var panalVisible = true;
 
   function anchoCelda() { return panal.clientWidth * 0.2; }
 
@@ -70,25 +94,51 @@
     }
   }
 
+  /* La onda es un frente que se aleja del centro. En cada instante, cada
+     hexagono vale segun lo cerca que este del frente — una campana estrecha —,
+     asi que se levantan por turnos de dentro hacia afuera. La cresta se apaga a
+     medida que avanza, como la energia de una onda al repartirse. */
+  function valorPulso(c, ahora) {
+    if (!pulsoInicio) return 0;
+    var t = (ahora - pulsoInicio) / PULSO_DUR;
+    if (t >= 1) return 0;
+    var frente = PULSO_DESDE + (PULSO_HASTA - PULSO_DESDE) * t;
+    var s = (c.dU - frente) / PULSO_ANCHO;
+    return Math.exp(-s * s) * PULSO_ALTO * (1 - 0.25 * t);
+  }
+
   function pintar() {
     cuadro = null;
+    var ahora = Date.now();
     var vivo = false;
+    var ondaViva = pulsoInicio !== 0 && ahora - pulsoInicio < PULSO_DUR;
+    if (pulsoInicio && !ondaViva) pulsoInicio = 0;
+
     for (var i = 0; i < celdas.length; i++) {
       var c = celdas[i];
+
       var d = c.obj - c.f;
       if (Math.abs(d) < 0.002) c.f = c.obj;
       else { c.f += d * SUAVIDAD; vivo = true; }
 
+      var pNuevo = ondaViva ? valorPulso(c, ahora) : 0;
+      if (pNuevo !== c.p) { c.p = pNuevo; c.el.style.setProperty('--p', pNuevo.toFixed(4)); }
+
       c.el.style.setProperty('--f', c.f.toFixed(4));
       // El mas crecido queda por encima de sus vecinos.
-      var z = c.f > 0.004 ? Math.round(c.f * 100) + 1 : 0;
+      var z = (c.f + c.p) > 0.004 ? Math.round((c.f + c.p) * 100) + 1 : 0;
       if (z !== c.z) { c.z = z; c.el.style.zIndex = z || ''; }
     }
-    if (vivo) cuadro = window.requestAnimationFrame(pintar);
+    if (vivo || ondaViva) cuadro = window.requestAnimationFrame(pintar);
   }
 
   function animar() {
     calcularObjetivos();
+    if (!cuadro) cuadro = window.requestAnimationFrame(pintar);
+  }
+
+  function lanzarPulso() {
+    pulsoInicio = Date.now();
     if (!cuadro) cuadro = window.requestAnimationFrame(pintar);
   }
 
@@ -132,14 +182,46 @@
     panal.addEventListener('pointermove', function (e) {
       var caja = panal.getBoundingClientRect();
       puntero = { x: e.clientX - caja.left, y: e.clientY - caja.top };
+      ultimaActividad = Date.now();
       leer(masCercano(puntero.x, puntero.y));
       animar();
     });
     panal.addEventListener('pointerleave', function () {
       puntero = null;
+      ultimaActividad = Date.now();
       leer(null);
       animar();
     });
+  }
+
+  /* ------------------------------------------------------------------
+     Latido en reposo.
+
+     Mientras nadie toca la colmena sale un pulso cada PULSO_ESPERA. Cualquier
+     movimiento sobre el panal reinicia la cuenta, y no se lanza nada si el
+     panal no esta en pantalla o la pestana esta en segundo plano: animar lo que
+     nadie ve solo gasta bateria.
+
+     Un pulso ya lanzado no se corta al llegar el raton — dura menos de segundo
+     y medio, y cortarlo daria un salto. Los dos efectos simplemente se suman.
+  ------------------------------------------------------------------ */
+  if (!menosMovimiento) {
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (entradas) {
+        panalVisible = entradas[0].isIntersecting;
+      }, { threshold: 0.25 }).observe(panal);
+    }
+
+    document.addEventListener('visibilitychange', function () {
+      if (!document.hidden) ultimaActividad = Date.now();
+    });
+
+    window.setInterval(function () {
+      if (document.hidden || !panalVisible || puntero || pulsoInicio) return;
+      if (Date.now() - ultimaActividad < PULSO_ESPERA) return;
+      ultimaActividad = Date.now();
+      lanzarPulso();
+    }, 500);
   }
 
   // Teclado: el foco hace las veces de puntero, centrado en esa celda.
@@ -149,6 +231,7 @@
     var c = null;
     for (var i = 0; i < celdas.length; i++) if (celdas[i].el === el) c = celdas[i];
     if (!c) return;
+    ultimaActividad = Date.now();
     if (menosMovimiento) { c.f = c.obj = 1; c.el.style.setProperty('--f', '1'); }
     else { puntero = centro(c); animar(); }
     leer(c);

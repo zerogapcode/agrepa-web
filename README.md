@@ -100,6 +100,18 @@ Tres números en `scripts/equipo.js` gobiernan la sensación —`ALCANCE` (qué 
 lejos llega), `SUAVIDAD` (cuánto persigue al objetivo en cada cuadro)— y el
 crecimiento máximo, que está en el `transform` de `.celda` en `scripts/equipo.css`.
 
+**Latido en reposo.** Cada 10 s sin actividad sobre la colmena sale una onda desde
+el hexágono central hacia afuera: un frente que avanza y levanta cada corona a su
+paso. Va en su propia variable `--p`, aparte del relieve del puntero, y solo suma
+tamaño y un pelo de trazo — el color queda reservado para el hover. La cresta es
+0.10 frente a los 0.26 del hover, para que se lea como respiración y no compita.
+Se ajusta con las constantes `PULSO_*` en `scripts/equipo.js`.
+
+No pulsa si el panal no está en pantalla, si la pestaña está en segundo plano, si
+el puntero está encima o si el sistema pide «menos movimiento». Un pulso ya lanzado
+no se corta al llegar el ratón: dura menos de segundo y medio y cortarlo daría un
+salto, así que los dos efectos simplemente se suman.
+
 Los centros se calculan con la misma fórmula que los coloca en el CSS, no midiendo
 el DOM: las celdas están escaladas y medirlas devolvería tamaños que cambian con el
 propio efecto. Con pantalla táctil o con «menos movimiento» activado el script no

@@ -17,15 +17,19 @@
 /* --f va de 0 a 1: es lo cerca que esta el puntero del centro de ESTE
    hexagono. Lo escribe equipo.js cuadro a cuadro con una caida continua, de
    modo que el tamano, el color y el grosor del trazo se reparten entre los
-   vecinos en vez de saltar por escalones. */
+   vecinos en vez de saltar por escalones.
+
+   --p es el aporte de la onda que recorre la colmena en reposo. Va aparte para
+   que no pise el relieve del puntero: solo suma tamano y un pelo de trazo, sin
+   tocar el color, que queda reservado para el hover. */
 .celda{
   position:absolute;
-  --f:0;
+  --f:0;--p:0;
   width:20%;height:25%;
   left:calc(50% + var(--x) * 20% - 10%);
   top:calc(50% + var(--r) * 18.75% - 12.5%);
   margin:0;padding:0;border:0;background:transparent;
-  transform:scale(calc(1 + var(--f) * .26));
+  transform:scale(calc(1 + var(--f) * .26 + var(--p)));
   z-index:0;
 }
 a.celda{cursor:pointer;-webkit-tap-highlight-color:transparent}
@@ -49,7 +53,7 @@ a.celda{cursor:pointer;-webkit-tap-highlight-color:transparent}
   fill:none;stroke-linejoin:round;
   stroke:#37373D;
   stroke:color-mix(in srgb, #37373D, var(--ambar) calc(var(--f) * 100%));
-  stroke-width:calc(2.2 + var(--f) * 1.5);
+  stroke-width:calc(2.2 + var(--f) * 1.5 + var(--p) * 6);
 }
 
 /* Respaldo: si el script no toma el relieve (sin JavaScript, con pantalla
