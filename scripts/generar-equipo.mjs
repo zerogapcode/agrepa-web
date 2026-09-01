@@ -67,7 +67,7 @@ const celda = (p) => {
 };
 
 const marca = `      <span class="celda celda--marca" style="--x:0;--r:0" data-q="0" data-r="0" aria-hidden="true">
-        <span class="celda__hex"><b>Agrepa</b></span>
+        <span class="celda__hex"><img src="img/equipo/isotipo-agrepa.png" width="300" height="255" alt="" decoding="async"></span>
         <svg class="celda__borde" viewBox="0 0 100 115.47"><polygon points="50,0 100,28.87 100,86.6 50,115.47 0,86.6 0,28.87"></polygon></svg>
       </span>`;
 
