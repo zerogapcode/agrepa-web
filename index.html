@@ -465,7 +465,7 @@ body{padding-bottom:calc(58px + env(safe-area-inset-bottom))}
     <img class="hero__img" src="img/56j-2.jpg"
          srcset="img/56j-2.jpg 900w, img/56j-2.jpg 1400w, img/56j-2.jpg 1920w"
          sizes="100vw" width="1920" height="1213"
-         alt="Colocación de carpeta asfáltica en caliente sobre una vía" fetchpriority="high">
+         alt="Colocación de carpeta asfáltica en caliente sobre una vía" fetchpriority="high" data-vel="1">
     <span class="hero__velo" aria-hidden="true"></span>
     <span class="hero__barra franja" aria-hidden="true"></span>
 
@@ -811,7 +811,7 @@ body{padding-bottom:calc(58px + env(safe-area-inset-bottom))}
 
 <script>
 (function () {
-  var hexes = Array.prototype.slice.call(document.querySelectorAll('.hex'));
+  var hexes = Array.prototype.slice.call(document.querySelectorAll('.hex, .hero__img'));
   if (!hexes.length) return;
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
