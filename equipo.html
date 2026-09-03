@@ -405,7 +405,7 @@ body{padding-bottom:calc(58px + env(safe-area-inset-bottom))}
 .panal{
   position:relative;
   width:100%;max-width:860px;margin:0 auto;
-  aspect-ratio:5 / 4.6188;
+  aspect-ratio:6 / 4.6188;
 }
 /* --f va de 0 a 1: es lo cerca que esta el puntero del centro de ESTE
    hexagono. Lo escribe equipo.js cuadro a cuadro con una caida continua, de
@@ -418,8 +418,8 @@ body{padding-bottom:calc(58px + env(safe-area-inset-bottom))}
 .celda{
   position:absolute;
   --f:0;--p:0;
-  width:20%;height:25%;
-  left:calc(50% + var(--x) * 20% - 10%);
+  width:16.6666%;height:25%;
+  left:calc(50% + var(--x) * 16.6666% - 8.3333%);
   top:calc(50% + var(--r) * 18.75% - 12.5%);
   margin:0;padding:0;border:0;background:transparent;
   transform:scale(calc(1 + var(--f) * .26 + var(--p)));
@@ -849,6 +849,23 @@ a.celda{cursor:pointer;-webkit-tap-highlight-color:transparent}
         <span class="celda__hex"><img src="img/equipo/genesisgarcia.png" width="600" height="693" alt="Retrato de Genesis Garcia" loading="lazy" decoding="async"></span>
         <svg class="celda__borde" viewBox="0 0 100 115.47" aria-hidden="true"><polygon points="50,0 100,28.87 100,86.6 50,115.47 0,86.6 0,28.87"></polygon></svg>
       </a>
+      <span class="celda celda--deco" style="--x:-2.5;--r:-1" data-q="-2" data-r="-1" aria-hidden="true">
+        <span class="celda__hex"></span>
+        <svg class="celda__borde" viewBox="0 0 100 115.47"><polygon points="50,0 100,28.87 100,86.6 50,115.47 0,86.6 0,28.87"></polygon></svg>
+      </span>
+      <span class="celda celda--deco" style="--x:2.5;--r:-1" data-q="3" data-r="-1" aria-hidden="true">
+        <span class="celda__hex"></span>
+        <svg class="celda__borde" viewBox="0 0 100 115.47"><polygon points="50,0 100,28.87 100,86.6 50,115.47 0,86.6 0,28.87"></polygon></svg>
+      </span>
+      <span class="celda celda--deco" style="--x:-2.5;--r:1" data-q="-3" data-r="1" aria-hidden="true">
+        <span class="celda__hex"></span>
+        <svg class="celda__borde" viewBox="0 0 100 115.47"><polygon points="50,0 100,28.87 100,86.6 50,115.47 0,86.6 0,28.87"></polygon></svg>
+      </span>
+      <span class="celda celda--deco" style="--x:2.5;--r:1" data-q="2" data-r="1" aria-hidden="true">
+        <span class="celda__hex"></span>
+        <svg class="celda__borde" viewBox="0 0 100 115.47"><polygon points="50,0 100,28.87 100,86.6 50,115.47 0,86.6 0,28.87"></polygon></svg>
+      </span>
+
         </div>
 
         <p class="panal__lectura" id="lectura" aria-live="polite">
@@ -1418,11 +1435,11 @@ a.celda{cursor:pointer;-webkit-tap-highlight-color:transparent}
   var ultimaActividad = Date.now() - PULSO_ESPERA + PULSO_PRIMER;
   var panalVisible = true;
 
-  function anchoCelda() { return panal.clientWidth * 0.2; }
+  function anchoCelda() { return panal.clientWidth * (1/6); }
 
   function centro(c) {
     return {
-      x: panal.clientWidth * (0.5 + c.x * 0.2),
+      x: panal.clientWidth * (0.5 + c.x * (1/6)),
       y: panal.clientHeight * (0.5 + c.r * 0.1875)
     };
   }
