@@ -424,6 +424,8 @@ body{padding-bottom:calc(58px + env(safe-area-inset-bottom))}
   margin:0;padding:0;border:0;background:transparent;
   transform:scale(calc(1 + var(--f) * .26 + var(--p)));
   z-index:0;
+  will-change:transform;
+  contain:layout style;
 }
 a.celda{cursor:pointer;-webkit-tap-highlight-color:transparent}
 .celda__hex{
@@ -1410,12 +1412,20 @@ a.celda{cursor:pointer;-webkit-tap-highlight-color:transparent}
   if (!panal) return;
 
   var celdas = Array.prototype.slice.call(panal.querySelectorAll('.celda')).map(function (el) {
+    var q = +el.getAttribute('data-q');
+    var r = +el.getAttribute('data-r');
+    var xCoord = q + r / 2;
     return {
       el: el,
-      q: +el.getAttribute('data-q'),
-      r: +el.getAttribute('data-r'),
-      x: +el.getAttribute('data-q') + (+el.getAttribute('data-r')) / 2,
+      q: q,
+      r: r,
+      x: xCoord,
+      // Centros normalizados (0-1), no cambian con resize
+      cx: 0.5 + xCoord * (1/6),
+      cy: 0.5 + r * 0.1875,
+      nombre: !!el.getAttribute('data-nombre'), // precache
       f: 0,   // relieve del puntero: valor pintado ahora
+      fPrev: -1, // ultimo --f escrito en el DOM
       obj: 0, // relieve del puntero: valor al que se dirige
       p: 0,   // aporte de la onda
       z: -1
@@ -1477,23 +1487,17 @@ a.celda{cursor:pointer;-webkit-tap-highlight-color:transparent}
   var ultimaActividad = Date.now() - PULSO_ESPERA + PULSO_PRIMER;
   var panalVisible = true;
 
-  function anchoCelda() { return panal.clientWidth * (1/6); }
-
-  function centro(c) {
-    return {
-      x: panal.clientWidth * (0.5 + c.x * (1/6)),
-      y: panal.clientHeight * (0.5 + c.r * 0.1875)
-    };
-  }
+  // Cachear dimensiones del panal; se actualiza al resize.
+  var pW = panal.clientWidth, pH = panal.clientHeight;
+  window.addEventListener('resize', function () { pW = panal.clientWidth; pH = panal.clientHeight; }, { passive: true });
 
   function calcularObjetivos() {
-    var W = anchoCelda();
+    var W = pW * (1/6);
     var R2 = (W * ALCANCE) * (W * ALCANCE);
     for (var i = 0; i < celdas.length; i++) {
       var c = celdas[i];
       if (!puntero) { c.obj = 0; continue; }
-      var p = centro(c);
-      var dx = p.x - puntero.x, dy = p.y - puntero.y;
+      var dx = c.cx * pW - puntero.x, dy = c.cy * pH - puntero.y;
       var v = Math.exp(-(dx * dx + dy * dy) / R2);
       c.obj = v < 0.004 ? 0 : v;
     }
@@ -1529,7 +1533,12 @@ a.celda{cursor:pointer;-webkit-tap-highlight-color:transparent}
       var pNuevo = ondaViva ? valorPulso(c, ahora) : 0;
       if (pNuevo !== c.p) { c.p = pNuevo; c.el.style.setProperty('--p', pNuevo.toFixed(4)); }
 
-      c.el.style.setProperty('--f', c.f.toFixed(4));
+      // Solo escribir --f cuando cambia (evita style mutations innecesarias)
+      var fRound = +c.f.toFixed(4);
+      if (fRound !== c.fPrev) {
+        c.fPrev = fRound;
+        c.el.style.setProperty('--f', c.f.toFixed(4));
+      }
       // El mas crecido queda por encima de sus vecinos.
       var z = (c.f + c.p) > 0.004 ? Math.round((c.f + c.p) * 100) + 1 : 0;
       if (z !== c.z) { c.z = z; c.el.style.zIndex = z || ''; }
@@ -1556,13 +1565,13 @@ a.celda{cursor:pointer;-webkit-tap-highlight-color:transparent}
   ------------------------------------------------------------------ */
 
   function masCercano(x, y) {
-    var W = anchoCelda();
+    var W = pW * (1/6);
     var limite = W * 0.62, mejor = null, mejorD = Infinity;
     for (var i = 0; i < celdas.length; i++) {
       var c = celdas[i];
-      if (!c.el.getAttribute('data-nombre')) continue;
-      var p = centro(c);
-      var d = Math.sqrt((p.x - x) * (p.x - x) + (p.y - y) * (p.y - y));
+      if (!c.nombre) continue;
+      var px = c.cx * pW, py = c.cy * pH;
+      var d = Math.sqrt((px - x) * (px - x) + (py - y) * (py - y));
       if (d < mejorD) { mejorD = d; mejor = c; }
     }
     return mejorD <= limite ? mejor : null;
@@ -1584,12 +1593,19 @@ a.celda{cursor:pointer;-webkit-tap-highlight-color:transparent}
   }
 
   if (campoActivo) {
+    var moveQueued = false;
     panal.addEventListener('pointermove', function (e) {
       var caja = panal.getBoundingClientRect();
       puntero = { x: e.clientX - caja.left, y: e.clientY - caja.top };
       ultimaActividad = Date.now();
-      leer(masCercano(puntero.x, puntero.y));
-      animar();
+      if (!moveQueued) {
+        moveQueued = true;
+        window.requestAnimationFrame(function () {
+          moveQueued = false;
+          leer(masCercano(puntero.x, puntero.y));
+          animar();
+        });
+      }
     });
     panal.addEventListener('pointerleave', function () {
       puntero = null;
@@ -1647,7 +1663,7 @@ a.celda{cursor:pointer;-webkit-tap-highlight-color:transparent}
     if (!c) return;
     ultimaActividad = Date.now();
     if (menosMovimiento) { c.f = c.obj = 1; c.el.style.setProperty('--f', '1'); }
-    else { puntero = centro(c); animar(); }
+    else { puntero = { x: c.cx * pW, y: c.cy * pH }; animar(); }
     leer(c);
   });
 
