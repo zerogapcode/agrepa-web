@@ -405,7 +405,7 @@ body{padding-bottom:calc(58px + env(safe-area-inset-bottom))}
 .panal{
   position:relative;
   width:100%;max-width:860px;margin:0 auto;
-  aspect-ratio:6 / 4.6188;
+  aspect-ratio:7 / 4.6188;
 }
 /* --f va de 0 a 1: es lo cerca que esta el puntero del centro de ESTE
    hexagono. Lo escribe equipo.js cuadro a cuadro con una caida continua, de
@@ -418,8 +418,8 @@ body{padding-bottom:calc(58px + env(safe-area-inset-bottom))}
 .celda{
   position:absolute;
   --f:0;--p:0;
-  width:16.6666%;height:25%;
-  left:calc(50% + var(--x) * 16.6666% - 8.3333%);
+  width:14.2857%;height:25%;
+  left:calc(50% + var(--x) * 14.2857% - 7.14285%);
   top:calc(50% + var(--r) * 18.75% - 12.5%);
   margin:0;padding:0;border:0;background:transparent;
   transform:scale(calc(1 + var(--f) * .26 + var(--p)));
@@ -887,6 +887,31 @@ a.celda{cursor:pointer;-webkit-tap-highlight-color:transparent}
         <span class="celda__hex"><img src="img/equipo/platano-2.png" width="600" height="693" alt="Retrato de Tony Romero" loading="lazy" decoding="async"></span>
         <svg class="celda__borde" viewBox="0 0 100 115.47" aria-hidden="true"><polygon points="50,0 100,28.87 100,86.6 50,115.47 0,86.6 0,28.87"></polygon></svg>
       </a>
+      <span class="celda celda--deco" style="--x:-3;--r:-2" data-q="-2" data-r="-2" aria-hidden="true">
+        <span class="celda__hex"></span>
+        <svg class="celda__borde" viewBox="0 0 100 115.47"><polygon points="50,0 100,28.87 100,86.6 50,115.47 0,86.6 0,28.87"></polygon></svg>
+      </span>
+      <span class="celda celda--deco" style="--x:3;--r:-2" data-q="4" data-r="-2" aria-hidden="true">
+        <span class="celda__hex"></span>
+        <svg class="celda__borde" viewBox="0 0 100 115.47"><polygon points="50,0 100,28.87 100,86.6 50,115.47 0,86.6 0,28.87"></polygon></svg>
+      </span>
+      <span class="celda celda--deco" style="--x:-3;--r:0" data-q="-3" data-r="0" aria-hidden="true">
+        <span class="celda__hex"></span>
+        <svg class="celda__borde" viewBox="0 0 100 115.47"><polygon points="50,0 100,28.87 100,86.6 50,115.47 0,86.6 0,28.87"></polygon></svg>
+      </span>
+      <span class="celda celda--deco" style="--x:3;--r:0" data-q="3" data-r="0" aria-hidden="true">
+        <span class="celda__hex"></span>
+        <svg class="celda__borde" viewBox="0 0 100 115.47"><polygon points="50,0 100,28.87 100,86.6 50,115.47 0,86.6 0,28.87"></polygon></svg>
+      </span>
+      <span class="celda celda--deco" style="--x:-3;--r:2" data-q="-4" data-r="2" aria-hidden="true">
+        <span class="celda__hex"></span>
+        <svg class="celda__borde" viewBox="0 0 100 115.47"><polygon points="50,0 100,28.87 100,86.6 50,115.47 0,86.6 0,28.87"></polygon></svg>
+      </span>
+      <span class="celda celda--deco" style="--x:3;--r:2" data-q="2" data-r="2" aria-hidden="true">
+        <span class="celda__hex"></span>
+        <svg class="celda__borde" viewBox="0 0 100 115.47"><polygon points="50,0 100,28.87 100,86.6 50,115.47 0,86.6 0,28.87"></polygon></svg>
+      </span>
+
 
         </div>
 
@@ -1463,7 +1488,7 @@ a.celda{cursor:pointer;-webkit-tap-highlight-color:transparent}
       r: r,
       x: xCoord,
       // Centros normalizados (0-1), no cambian con resize
-      cx: 0.5 + xCoord * (1/6),
+      cx: 0.5 + xCoord * (1/7),
       cy: 0.5 + r * 0.1875,
       nombre: !!el.getAttribute('data-nombre'), // precache
       f: 0,   // relieve del puntero: valor pintado ahora
@@ -1534,7 +1559,7 @@ a.celda{cursor:pointer;-webkit-tap-highlight-color:transparent}
   window.addEventListener('resize', function () { pW = panal.clientWidth; pH = panal.clientHeight; }, { passive: true });
 
   function calcularObjetivos() {
-    var W = pW * (1/6);
+    var W = pW * (1/7);
     var R2 = (W * ALCANCE) * (W * ALCANCE);
     for (var i = 0; i < celdas.length; i++) {
       var c = celdas[i];
@@ -1607,7 +1632,7 @@ a.celda{cursor:pointer;-webkit-tap-highlight-color:transparent}
   ------------------------------------------------------------------ */
 
   function masCercano(x, y) {
-    var W = pW * (1/6);
+    var W = pW * (1/7);
     var limite = W * 0.62, mejor = null, mejorD = Infinity;
     for (var i = 0; i < celdas.length; i++) {
       var c = celdas[i];
