@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
 # Cambia el dominio del sitio en TODOS los archivos de una sola vez.
 #
-#   ./scripts/set-dominio.sh agrepaasfalcem.com
-#   ./scripts/set-dominio.sh www.agrepaasfalcem.com
+#   ./scripts/set-dominio.sh agrepasfalcem.com
+#   ./scripts/set-dominio.sh www.agrepasfalcem.com
 #
 # Hace tres cosas:
-#   1. Reemplaza la URL base actual por la nueva en index.html, 404.html,
-#      robots.txt y sitemap.xml (canonical, Open Graph, JSON-LD, enlaces).
+#   1. Reemplaza la URL base actual por la nueva en index.html, equipo.html,
+#      404.html, robots.txt, sitemap.xml y el generador de equipo.html
+#      (canonical, Open Graph, JSON-LD, enlaces).
 #   2. Escribe el archivo CNAME que GitHub Pages necesita para el dominio propio.
 #   3. Actualiza la fecha <lastmod> del sitemap.
 #
@@ -16,7 +17,7 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 
 if [ $# -ne 1 ]; then
-  echo "Uso: $0 <dominio>   (ej: agrepaasfalcem.com)" >&2
+  echo "Uso: $0 <dominio>   (ej: agrepasfalcem.com)" >&2
   exit 1
 fi
 
@@ -39,7 +40,7 @@ fi
 echo "Base actual : $BASE_ACTUAL"
 echo "Base nueva  : $NUEVA_BASE"
 
-for f in index.html 404.html robots.txt sitemap.xml; do
+for f in index.html equipo.html 404.html robots.txt sitemap.xml scripts/generar-equipo.mjs; do
   [ -f "$f" ] || continue
   # El delimitador | es seguro: no aparece en URLs.
   sed -i.bak "s|${BASE_ACTUAL}|${NUEVA_BASE}|g" "$f"
@@ -56,7 +57,7 @@ sed -i.bak "s|<lastmod>[^<]*</lastmod>|<lastmod>${HOY}</lastmod>|" sitemap.xml
 rm -f sitemap.xml.bak
 echo "  sitemap lastmod -> $HOY"
 
-RESTOS=$(grep -rl "$BASE_ACTUAL" --include='*.html' --include='*.xml' --include='*.txt' . 2>/dev/null || true)
+RESTOS=$(grep -rl "$BASE_ACTUAL" --include='*.html' --include='*.xml' --include='*.txt' --include='*.mjs' . 2>/dev/null || true)
 if [ -n "$RESTOS" ]; then
   echo "AVISO: quedaron referencias a la base anterior en:" >&2
   echo "$RESTOS" >&2

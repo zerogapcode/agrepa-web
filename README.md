@@ -54,13 +54,13 @@ Al comprar el dominio, un solo comando actualiza todo — canonical, Open Graph,
 enlaces internos, `robots.txt`, `sitemap.xml` — y escribe el `CNAME` que necesita Pages:
 
 ```bash
-./scripts/set-dominio.sh agrepaasfalcem.com
+./scripts/set-dominio.sh agrepasfalcem.com
 git add -A && git commit -m "Apuntar el sitio al dominio propio" && git push
 ```
 
 Después, del lado del registrador y de GitHub:
 
-1. **DNS del registrador** — para el dominio raíz (`agrepaasfalcem.com`), cuatro registros `A`:
+1. **DNS del registrador** — para el dominio raíz (`agrepasfalcem.com`), cuatro registros `A`:
    `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`.
    Para `www`, un `CNAME` a `zerogapcode.github.io`.
 2. **GitHub → Settings → Pages** — poner el dominio en *Custom domain*, esperar la
