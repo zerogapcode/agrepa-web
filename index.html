@@ -867,11 +867,16 @@ body{padding-bottom:calc(58px + env(safe-area-inset-bottom))}
   }
   .daniel-btn__punto{
     position:absolute;top:-5px;right:-5px;width:12px;height:12px;background:var(--ambar);
-    box-shadow:0 0 0 0 rgba(246,177,11,.65);animation:danielLatido 2.4s ease-out infinite;
+    box-shadow:0 0 0 0 rgba(246,177,11,.65);animation:danielLatido 3.6s ease-out infinite backwards;
   }
+  /* El latido baja en cadena: Kelin, William, Daniel y una pausa. Cada pulso
+     ocupa la primera cuarta parte del ciclo (0.9 s) y el siguiente arranca
+     justo cuando el anterior se apaga. */
+  .daniel-btn[data-asesor="william"] .daniel-btn__punto{animation-delay:.9s}
+  .daniel-btn[data-asesor="daniel"] .daniel-btn__punto{animation-delay:1.8s}
   @keyframes danielLatido{
-    0%{box-shadow:0 0 0 0 rgba(246,177,11,.6)}
-    70%{box-shadow:0 0 0 12px rgba(246,177,11,0)}
+    0%{box-shadow:0 0 0 0 rgba(246,177,11,.7)}
+    25%{box-shadow:0 0 0 12px rgba(246,177,11,0)}
     100%{box-shadow:0 0 0 0 rgba(246,177,11,0)}
   }
 
@@ -979,10 +984,12 @@ body{padding-bottom:calc(58px + env(safe-area-inset-bottom))}
 
 <div class="daniel-pila" id="danielPila">
   <button class="daniel-btn" type="button" data-asesor="kelin" aria-expanded="false" aria-controls="danielPanel" aria-label="Hablar con Kelin, asistente virtual de gerencia y administración">
+    <span class="daniel-btn__punto" aria-hidden="true"></span>
     <span class="daniel-btn__foto"><img src="img/kelinbot.webp" width="200" height="200" alt="" loading="lazy"></span>
     <span class="daniel-btn__txt">Kelin<small>Gerencia y administración</small></span>
   </button>
   <button class="daniel-btn" type="button" data-asesor="william" aria-expanded="false" aria-controls="danielPanel" aria-label="Hablar con William, asistente virtual de obras">
+    <span class="daniel-btn__punto" aria-hidden="true"></span>
     <span class="daniel-btn__foto"><img src="img/williambot.webp" width="200" height="200" alt="" loading="lazy"></span>
     <span class="daniel-btn__txt">William<small>Ingeniero de campo</small></span>
   </button>
