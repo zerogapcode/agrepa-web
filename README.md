@@ -151,7 +151,8 @@ extensiones y correos corporativos sin tocar el diseño — solo cambia
 
 ## Asesores virtuales (Daniel, William y Kelin)
 
-El botón flotante abre un chat con tres asesores; arriba del chat se elige con quién hablar:
+Tres botones flotantes, uno sobre otro (Kelin, William y Daniel, de arriba abajo); cada uno
+abre el chat de ese asesor:
 
 | Asesor | `assistant` | Área | Foto |
 |---|---|---|---|
