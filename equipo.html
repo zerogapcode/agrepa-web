@@ -135,7 +135,7 @@ ul{margin:0;padding:0;list-style:none}
   backdrop-filter:saturate(140%) blur(10px);
   border-bottom:1px solid var(--borde);
 }
-.cabecera__fila{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-top:10px;padding-bottom:10px}
+.cabecera__fila{display:flex;align-items:center;justify-content:space-between;gap:8px;padding-top:10px;padding-bottom:10px}
 .marca{display:block;flex:none}
 .marca img{width:clamp(160px,44vw,230px)}
 .nav{display:none}
@@ -144,6 +144,17 @@ ul{margin:0;padding:0;list-style:none}
 .nav__lista a:hover{color:var(--ambar)}
 .tel-cab{display:none;align-items:center;gap:9px;color:var(--asfalto);background:var(--ambar);padding:13px 20px;font-size:.875rem;white-space:nowrap}
 .tel-cab:hover{color:var(--asfalto);background:var(--ambar-claro)}
+.dossier-cab{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;flex:none;
+  min-width:48px;min-height:48px;padding:0 10px;margin-left:auto;
+  color:var(--ambar);border:1px solid var(--ambar);background:transparent;
+  font-size:.8125rem;letter-spacing:.1em;white-space:nowrap;
+  transition:background .15s ease,color .15s ease;
+}
+.dossier-cab:hover{color:var(--asfalto);background:var(--ambar)}
+.dossier-cab svg{flex:none}
+.dossier-cab__txt,.dossier-cab__ano{display:none}
+@media (min-width:380px){.dossier-cab__txt{display:inline}}
 
 .hamburguesa{
   display:inline-flex;align-items:center;justify-content:center;
@@ -368,7 +379,9 @@ body{padding-bottom:calc(58px + env(safe-area-inset-bottom))}
 }
 @media (min-width:1024px){
   .cabecera__fila{padding-top:14px;padding-bottom:14px}
-  .nav{display:block}
+  .nav{display:block;margin-left:auto}
+  .dossier-cab{margin-left:20px;padding:0 16px;letter-spacing:.15em}
+  .dossier-cab__ano{display:inline}
   .hamburguesa{display:none}
   .menu{display:none!important}
   .hero{min-height:600px;display:flex;flex-direction:column;justify-content:center}
@@ -611,6 +624,11 @@ a.celda{cursor:pointer;-webkit-tap-highlight-color:transparent}
       </ul>
     </nav>
 
+    <a class="dossier-cab lbl" href="descargas/dossier-agrepa-asfalcem-2026.pdf" download="Dossier Agrepa Asfalcem 2026.pdf" aria-label="Descargar el dossier corporativo 2026 (PDF, 29 MB)" title="Dossier corporativo 2026 · PDF, 29 MB">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"></path><path d="m7 10 5 5 5-5"></path><path d="M5 21h14"></path></svg>
+      <span class="dossier-cab__txt">Dossier<span class="dossier-cab__ano">&nbsp;2026</span></span>
+    </a>
+
     <button class="hamburguesa" type="button" id="abrirMenu" aria-expanded="false" aria-controls="menuMovil" aria-label="Abrir menú">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 6h18"></path><path d="M3 12h18"></path><path d="M3 18h18"></path></svg>
     </button>
@@ -636,6 +654,7 @@ a.celda{cursor:pointer;-webkit-tap-highlight-color:transparent}
   </nav>
   <div class="menu__pie">
     <a class="btn btn--primario" href="index.html#presupuesto">Solicitar presupuesto</a>
+    <a class="btn btn--linea" href="descargas/dossier-agrepa-asfalcem-2026.pdf" download="Dossier Agrepa Asfalcem 2026.pdf"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"></path><path d="m7 10 5 5 5-5"></path><path d="M5 21h14"></path></svg>Descargar dossier 2026</a>
   </div>
 </div>
 

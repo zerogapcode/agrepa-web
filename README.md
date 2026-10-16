@@ -19,6 +19,7 @@ equipo.html     Equipo y contactos directos — GENERADA, no editar a mano
 404.html        Página de error con la identidad de la marca
 img/            Imágenes del sitio
 img/equipo/     Retratos del personal + avatar genérico
+descargas/      Dossier corporativo 2026 en PDF (botón «Dossier» de la cabecera)
 js/config.js    URL del Worker de Cloudflare + memoria de conversación del bot
 robots.txt      Permite indexación, apunta al sitemap
 sitemap.xml     Una entrada por página; agregar aquí cada página nueva
