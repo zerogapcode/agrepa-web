@@ -149,15 +149,29 @@ extensiones y correos corporativos sin tocar el diseño — solo cambia
 
 ---
 
-## Asistente virtual (Daniel Bot)
+## Asesores virtuales (Daniel, William y Kelin)
 
-El botón flotante habla con un Worker de Cloudflare compartido, definido en
-`js/config.js`, enviando `{ message, assistant: "daniel", session_id }`.
+El botón flotante abre un chat con tres asesores; arriba del chat se elige con quién hablar:
 
-> **Pendiente y bloqueante:** el Worker todavía no tiene el caso `daniel`. Hasta que se
-> agregue, Daniel responde con la personalidad genérica de ProtonLab en vez de la de
-> Agrepa. El bloque a pegar está en [`docs/daniel-bot-worker.js`](docs/daniel-bot-worker.js);
-> va justo antes de `} else if (assistantType === "carlitos") {`.
+| Asesor | `assistant` | Área | Foto |
+|---|---|---|---|
+| Daniel | `daniel` | Planta y producción de asfalto | `img/danybot.webp` |
+| William | `william` | Ingeniero de campo: asfaltados, movimiento de tierra, obras en sitio | `img/williambot.webp` |
+| Kelin | `kelin` | Gerencia general: administración, finanzas y legal | `img/kelinbot.webp` |
+
+Cada uno lleva su propia conversación y sesión. Todos hablan con el mismo Worker de
+Cloudflare, definido en `js/config.js`, enviando `{ message, assistant, session_id }`.
+Los textos de saludo, sugerencias y cargos están en el objeto `ASESORES` al final de
+`index.html` (`equipo.html` lleva una copia idéntica del bloque).
+
+Las personalidades viven en el Worker, no en este repositorio. Daniel ya está cargado.
+William y Kelin se agregan pegando [`docs/asesores-worker.js`](docs/asesores-worker.js)
+justo antes de `} else if (assistantType === "carlitos") {`. Hasta entonces responden con
+la personalidad genérica de ProtonLab.
+
+[`docs/daniel-bot-worker.js`](docs/daniel-bot-worker.js) tiene una versión de Daniel más
+completa que la cargada hoy en el Worker (servicios, zona, reglas contra inventar precios),
+por si se quiere reemplazar.
 
 El historial de conversación se guarda en el `localStorage` del visitante (últimas 14
 intervenciones), no en el servidor.

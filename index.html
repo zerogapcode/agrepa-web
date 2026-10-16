@@ -838,7 +838,7 @@ body{padding-bottom:calc(58px + env(safe-area-inset-bottom))}
 })();
 </script>
 
-<!-- ================= DANIEL BOT — ASISTENTE VIRTUAL ================= -->
+<!-- ================= DANIEL BOT — ASESORES VIRTUALES (Daniel, William, Kelin) ================= -->
 <style>
   .daniel-btn{
     position:fixed;right:16px;z-index:75;
@@ -852,7 +852,9 @@ body{padding-bottom:calc(58px + env(safe-area-inset-bottom))}
     transition:transform .18s ease,background .18s ease;
   }
   .daniel-btn:hover{transform:translateY(-2px);background:#17171A}
+  .daniel-btn__fotos{display:flex;flex:none}
   .daniel-btn__foto{display:block;flex:none;width:40px;height:40px;background:var(--ambar);overflow:hidden}
+  .daniel-btn__foto + .daniel-btn__foto{margin-left:-10px;box-shadow:-2px 0 0 var(--asfalto)}
   .daniel-btn__foto img,.daniel-avatar img,.daniel-msg__av img{width:100%;height:100%;object-fit:cover;display:block}
   .daniel-btn__txt{display:none}
   .daniel-btn__punto{
@@ -874,7 +876,7 @@ body{padding-bottom:calc(58px + env(safe-area-inset-bottom))}
   .daniel-panel__cab{
     display:flex;align-items:center;gap:12px;flex:none;
     padding:calc(14px + env(safe-area-inset-top)) 16px 14px;
-    background:#141416;border-bottom:3px solid var(--ambar);
+    background:#141416;border-bottom:1px solid var(--borde);
   }
   .daniel-panel__id{display:flex;flex-direction:column;gap:1px;flex:1;min-width:0}
   .daniel-panel__id b{
@@ -896,10 +898,43 @@ body{padding-bottom:calc(58px + env(safe-area-inset-bottom))}
     display:flex;align-items:center;justify-content:center;flex:none;
     width:42px;height:42px;background:var(--ambar);color:var(--asfalto);overflow:hidden;
   }
+
+  /* Selector de asesor: la linea ambar marca con quien se esta hablando */
+  .daniel-equipo{
+    display:grid;grid-template-columns:repeat(3,minmax(0,1fr));flex:none;
+    background:#141416;border-bottom:1px solid var(--borde);
+  }
+  .daniel-equipo button{
+    display:flex;align-items:center;gap:8px;min-width:0;min-height:54px;padding:8px 10px;
+    background:transparent;border:0;border-bottom:3px solid transparent;
+    color:var(--texto-3);cursor:pointer;text-align:left;
+  }
+  .daniel-equipo button + button{border-left:1px solid var(--borde)}
+  .daniel-equipo img{
+    width:30px;height:30px;flex:none;object-fit:cover;background:var(--ambar);
+    filter:grayscale(1);opacity:.6;transition:filter .18s ease,opacity .18s ease;
+  }
+  .daniel-equipo span{display:flex;flex-direction:column;min-width:0}
+  .daniel-equipo b{
+    font-family:'Barlow Condensed','Arial Narrow',sans-serif;font-weight:700;
+    text-transform:uppercase;letter-spacing:.06em;font-size:.9375rem;color:var(--texto-2);
+  }
+  .daniel-equipo small{
+    font-size:.6875rem;line-height:1.3;color:var(--texto-4);
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  }
+  .daniel-equipo button:hover img{filter:none;opacity:.9}
+  .daniel-equipo button[aria-pressed="true"]{background:var(--asfalto);border-bottom-color:var(--ambar)}
+  .daniel-equipo button[aria-pressed="true"] img{filter:none;opacity:1}
+  .daniel-equipo button[aria-pressed="true"] b{color:var(--ambar)}
+  .daniel-equipo button:focus-visible{outline:2px solid var(--ambar);outline-offset:-2px}
+
   .daniel-panel__cuerpo{
     flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;
-    display:flex;flex-direction:column;gap:14px;padding:20px 16px;
+    padding:20px 16px;
   }
+  .daniel-hilo{display:flex;flex-direction:column;gap:14px}
+  .daniel-hilo[hidden]{display:none}
   .daniel-msg{display:flex;gap:10px;align-items:flex-start;max-width:100%}
   .daniel-msg__av{
     display:flex;align-items:center;justify-content:center;flex:none;
@@ -953,10 +988,10 @@ body{padding-bottom:calc(58px + env(safe-area-inset-bottom))}
   }
 
   @media (min-width:768px){
-    .daniel-btn{bottom:24px;right:24px;padding:0 22px}
+    .daniel-btn{bottom:24px;right:24px;padding:0 22px 0 16px}
     .daniel-btn__txt{display:inline}
     .daniel-panel{
-      inset:auto 24px 24px auto;width:390px;height:min(600px,calc(100vh - 120px));
+      inset:auto 24px 24px auto;width:400px;height:min(640px,calc(100vh - 120px));
       box-shadow:0 24px 60px rgba(0,0,0,.6);
     }
     .daniel-panel__cab{padding-top:14px}
@@ -964,47 +999,101 @@ body{padding-bottom:calc(58px + env(safe-area-inset-bottom))}
   }
 </style>
 
-<button class="daniel-btn" type="button" id="danielAbrir" aria-expanded="false" aria-controls="danielPanel" aria-label="Abrir el asistente Daniel Bot">
+<button class="daniel-btn" type="button" id="danielAbrir" aria-expanded="false" aria-controls="danielPanel" aria-label="Abrir los asesores virtuales de Agrepa Asfalcem">
   <span class="daniel-btn__punto" aria-hidden="true"></span>
-  <span class="daniel-btn__foto"><img src="img/danybot.webp" width="200" height="200" alt="" loading="lazy"></span>
-  <span class="daniel-btn__txt">Daniel</span>
+  <span class="daniel-btn__fotos" aria-hidden="true">
+    <span class="daniel-btn__foto"><img src="img/danybot.webp" width="200" height="200" alt="" loading="lazy"></span>
+    <span class="daniel-btn__foto"><img src="img/williambot.webp" width="200" height="200" alt="" loading="lazy"></span>
+    <span class="daniel-btn__foto"><img src="img/kelinbot.webp" width="200" height="200" alt="" loading="lazy"></span>
+  </span>
+  <span class="daniel-btn__txt">Asesores</span>
 </button>
 
-<section class="daniel-panel" id="danielPanel" data-abierto="false" role="dialog" aria-modal="false" aria-label="Asistente virtual Daniel Bot">
+<section class="daniel-panel" id="danielPanel" data-abierto="false" role="dialog" aria-modal="false" aria-label="Asesores virtuales de Agrepa Asfalcem">
   <header class="daniel-panel__cab">
     <span class="daniel-avatar" aria-hidden="true">
-      <img src="img/danybot.webp" width="200" height="200" alt="">
+      <img id="danielCabFoto" src="img/danybot.webp" width="200" height="200" alt="">
     </span>
     <span class="daniel-panel__id">
-      <b>Daniel Bot</b>
-      <span>Asistente de Agrepa Asfalcem</span>
+      <b id="danielCabNombre">Daniel</b>
+      <span id="danielCabCargo">Producción de asfalto y agregados</span>
     </span>
     <button class="daniel-cerrar" type="button" id="danielCerrar" aria-label="Cerrar el asistente">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
     </button>
   </header>
 
-  <div class="daniel-panel__cuerpo" id="danielMensajes" role="log" aria-live="polite" aria-atomic="false"></div>
-
-  <div class="daniel-sugerencias" id="danielSugerencias">
-    <button type="button" data-q="¿Qué servicios ofrecen?">¿Qué servicios ofrecen?</button>
-    <button type="button" data-q="¿En qué zonas trabajan?">¿En qué zonas trabajan?</button>
-    <button type="button" data-q="Quiero un presupuesto para asfaltar">Quiero un presupuesto</button>
+  <div class="daniel-equipo" id="danielEquipo" role="group" aria-label="Elija con quién hablar">
+    <button type="button" data-asesor="daniel" aria-pressed="true">
+      <img src="img/danybot.webp" width="200" height="200" alt="" loading="lazy">
+      <span><b>Daniel</b><small>Planta</small></span>
+    </button>
+    <button type="button" data-asesor="william" aria-pressed="false">
+      <img src="img/williambot.webp" width="200" height="200" alt="" loading="lazy">
+      <span><b>William</b><small>Obras</small></span>
+    </button>
+    <button type="button" data-asesor="kelin" aria-pressed="false">
+      <img src="img/kelinbot.webp" width="200" height="200" alt="" loading="lazy">
+      <span><b>Kelin</b><small>Gerencia</small></span>
+    </button>
   </div>
 
+  <div class="daniel-panel__cuerpo" id="danielMensajes" role="log" aria-live="polite" aria-atomic="false"></div>
+
+  <div class="daniel-sugerencias" id="danielSugerencias"></div>
+
   <form class="daniel-panel__pie" id="danielForm">
-    <textarea id="danielInput" rows="1" placeholder="Escriba su consulta sobre asfaltado…" aria-label="Escriba su consulta"></textarea>
+    <textarea id="danielInput" rows="1" placeholder="Escriba su consulta…" aria-label="Escriba su consulta"></textarea>
     <button class="daniel-enviar" type="submit" id="danielEnviar" aria-label="Enviar mensaje">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path><path d="m13 6 6 6-6 6"></path></svg>
     </button>
   </form>
-  <p class="daniel-aviso">Daniel Bot es un asistente automático. Para presupuestos en firme, escríbanos por WhatsApp.</p>
+  <p class="daniel-aviso">Daniel, William y Kelin son asistentes virtuales automáticos. Para presupuestos en firme, escríbanos por WhatsApp.</p>
 </section>
 
 <script src="js/config.js"></script>
 <script>
 (function () {
-  var ASISTENTE = 'daniel';
+  // Cada asesor es un "assistant" distinto en el Worker de Cloudflare.
+  var ASESORES = {
+    daniel: {
+      nombre: 'Daniel',
+      cargo: 'Producción de asfalto y agregados',
+      foto: 'img/danybot.webp',
+      saludo: 'Buenas. Soy Daniel, del equipo de Agrepa Asfalcem. Puedo informarle sobre asfaltado de vías, producción de asfalto, obras civiles y alquiler de maquinaria. ¿En qué lo ayudo?',
+      placeholder: 'Escriba su consulta sobre asfalto o planta…',
+      sugerencias: [
+        ['¿Qué servicios ofrecen?', '¿Qué servicios ofrecen?'],
+        ['¿En qué zonas trabajan?', '¿En qué zonas trabajan?'],
+        ['Quiero un presupuesto', 'Quiero un presupuesto para asfaltar']
+      ]
+    },
+    william: {
+      nombre: 'William',
+      cargo: 'Ingeniero de campo · Obras en sitio',
+      foto: 'img/williambot.webp',
+      saludo: 'Buenas. Soy William, ingeniero de campo de Agrepa Asfalcem. Le oriento sobre asfaltados, bacheo, movimiento de tierra y cómo se ejecuta una obra en sitio. ¿Qué tiene en mente?',
+      placeholder: 'Cuénteme sobre su obra…',
+      sugerencias: [
+        ['¿Cómo se hace un asfaltado?', '¿Cómo se hace un asfaltado, paso a paso?'],
+        ['Necesito movimiento de tierra', 'Necesito movimiento de tierra en un terreno'],
+        ['¿Pueden visitar mi obra?', '¿Pueden ir a evaluar mi obra en sitio?']
+      ]
+    },
+    kelin: {
+      nombre: 'Kelin',
+      cargo: 'Gerencia general · Administración y legal',
+      foto: 'img/kelinbot.webp',
+      saludo: 'Buenas. Soy Kelin, de la gerencia general de Agrepa Asfalcem. Le atiendo en lo administrativo: contratación, documentos legales de la empresa, facturación y pagos. ¿En qué le ayudo?',
+      placeholder: 'Escriba su consulta administrativa…',
+      sugerencias: [
+        ['¿Cómo formalizo un contrato?', '¿Cómo se formaliza un contrato con ustedes?'],
+        ['Documentos de la empresa', '¿Qué documentos de la empresa me pueden entregar como contratista?'],
+        ['Facturación y pagos', '¿Cómo funciona la facturación y los pagos?']
+      ]
+    }
+  };
+
   var btn = document.getElementById('danielAbrir');
   var panel = document.getElementById('danielPanel');
   var cerrar = document.getElementById('danielCerrar');
@@ -1013,13 +1102,32 @@ body{padding-bottom:calc(58px + env(safe-area-inset-bottom))}
   var input = document.getElementById('danielInput');
   var enviar = document.getElementById('danielEnviar');
   var sugerencias = document.getElementById('danielSugerencias');
+  var equipo = document.getElementById('danielEquipo');
+  var cabFoto = document.getElementById('danielCabFoto');
+  var cabNombre = document.getElementById('danielCabNombre');
+  var cabCargo = document.getElementById('danielCabCargo');
   if (!btn || !panel) return;
 
-  var sessionId = 'agrepa-daniel-session-' + Date.now();
-  var ocupado = false;
-  var iniciado = false;
+  // Cada asesor lleva su propia conversacion: hilo, sesion y estado.
+  var actual = 'daniel';
+  var estado = {};
+  Object.keys(ASESORES).forEach(function (id) {
+    var hilo = document.createElement('div');
+    hilo.className = 'daniel-hilo';
+    hilo.hidden = true;
+    cuerpo.appendChild(hilo);
+    estado[id] = {
+      hilo: hilo,
+      sessionId: 'agrepa-' + id + '-session-' + Date.now(),
+      iniciado: false,
+      ocupado: false,
+      pregunto: false
+    };
+  });
 
-  var AVATAR = '<img src="img/danybot.webp" width="200" height="200" alt="">';
+  function avatar(id) {
+    return '<img src="' + ASESORES[id].foto + '" width="200" height="200" alt="">';
+  }
 
   function escapar(t) {
     return String(t).replace(/[&<>"']/g, function (c) {
@@ -1027,46 +1135,77 @@ body{padding-bottom:calc(58px + env(safe-area-inset-bottom))}
     });
   }
 
-  function agregar(texto, esUsuario) {
+  function bajar() { cuerpo.scrollTop = cuerpo.scrollHeight; }
+
+  function agregar(id, texto, esUsuario) {
     var fila = document.createElement('div');
     fila.className = 'daniel-msg' + (esUsuario ? ' yo' : '');
     var av = document.createElement('span');
     av.className = 'daniel-msg__av';
-    if (esUsuario) { av.textContent = 'Ud'; } else { av.innerHTML = AVATAR; }
+    if (esUsuario) { av.textContent = 'Ud'; } else { av.innerHTML = avatar(id); }
     var txt = document.createElement('div');
     txt.className = 'daniel-msg__txt';
     txt.innerHTML = escapar(texto).replace(/\n/g, '<br>');
     fila.appendChild(av);
     fila.appendChild(txt);
-    cuerpo.appendChild(fila);
-    cuerpo.scrollTop = cuerpo.scrollHeight;
+    estado[id].hilo.appendChild(fila);
+    if (id === actual) bajar();
     return fila;
   }
 
-  function escribiendo() {
+  function escribiendo(id) {
     var fila = document.createElement('div');
     fila.className = 'daniel-msg';
-    fila.innerHTML = '<span class="daniel-msg__av">' + AVATAR + '</span>' +
+    fila.innerHTML = '<span class="daniel-msg__av">' + avatar(id) + '</span>' +
       '<div class="daniel-msg__txt"><span class="daniel-puntos"><i></i><i></i><i></i></span></div>';
-    cuerpo.appendChild(fila);
-    cuerpo.scrollTop = cuerpo.scrollHeight;
+    estado[id].hilo.appendChild(fila);
+    if (id === actual) bajar();
     return fila;
   }
 
-  function bloquear(v) {
-    ocupado = v;
-    input.disabled = v;
-    enviar.disabled = v;
+  function controles() {
+    var ocupado = estado[actual].ocupado;
+    input.disabled = ocupado;
+    enviar.disabled = ocupado;
+  }
+
+  function pintarSugerencias() {
+    sugerencias.innerHTML = '';
+    ASESORES[actual].sugerencias.forEach(function (s) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.setAttribute('data-q', s[1]);
+      b.textContent = s[0];
+      sugerencias.appendChild(b);
+    });
+    sugerencias.hidden = estado[actual].pregunto;
+  }
+
+  function elegir(id) {
+    var a = ASESORES[id];
+    actual = id;
+    Object.keys(estado).forEach(function (k) { estado[k].hilo.hidden = k !== id; });
+    equipo.querySelectorAll('button[data-asesor]').forEach(function (b) {
+      b.setAttribute('aria-pressed', b.getAttribute('data-asesor') === id ? 'true' : 'false');
+    });
+    cabFoto.src = a.foto;
+    cabNombre.textContent = a.nombre;
+    cabCargo.textContent = a.cargo;
+    input.placeholder = a.placeholder;
+    if (!estado[id].iniciado) {
+      estado[id].iniciado = true;
+      agregar(id, a.saludo, false);
+    }
+    pintarSugerencias();
+    controles();
+    bajar();
   }
 
   function abrir(v) {
     panel.setAttribute('data-abierto', v ? 'true' : 'false');
     btn.setAttribute('aria-expanded', v ? 'true' : 'false');
     if (v) {
-      if (!iniciado) {
-        iniciado = true;
-        agregar('Buenas. Soy Daniel, del equipo de Agrepa Asfalcem. Puedo informarle sobre asfaltado de vías, producción de asfalto, obras civiles y alquiler de maquinaria. ¿En qué lo ayudo?', false);
-      }
+      elegir(actual);
       setTimeout(function () { input.focus(); }, 80);
     } else {
       btn.focus();
@@ -1077,6 +1216,11 @@ body{padding-bottom:calc(58px + env(safe-area-inset-bottom))}
   cerrar.addEventListener('click', function () { abrir(false); });
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape' && panel.getAttribute('data-abierto') === 'true') { abrir(false); }
+  });
+
+  equipo.addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-asesor]');
+    if (b) elegir(b.getAttribute('data-asesor'));
   });
 
   input.addEventListener('input', function () {
@@ -1093,29 +1237,35 @@ body{padding-bottom:calc(58px + env(safe-area-inset-bottom))}
 
   sugerencias.addEventListener('click', function (e) {
     var b = e.target.closest('button[data-q]');
-    if (!b || ocupado) return;
+    if (!b || estado[actual].ocupado) return;
     preguntar(b.getAttribute('data-q'));
   });
 
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     var texto = input.value.trim();
-    if (!texto || ocupado) return;
+    if (!texto || estado[actual].ocupado) return;
     input.value = '';
     input.style.height = 'auto';
     preguntar(texto);
   });
 
+  // La respuesta vuelve al hilo de quien se le pregunto, aunque el visitante
+  // haya cambiado de asesor mientras tanto.
   function preguntar(texto) {
-    agregar(texto, true);
+    var id = actual;
+    var e = estado[id];
+    agregar(id, texto, true);
+    e.pregunto = true;
     sugerencias.hidden = true;
-    bloquear(true);
-    var esperando = escribiendo();
+    e.ocupado = true;
+    controles();
+    var esperando = escribiendo(id);
 
     fetch(CONFIG.API_SERVER_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify({ message: texto, assistant: ASISTENTE, session_id: sessionId })
+      body: JSON.stringify({ message: texto, assistant: id, session_id: e.sessionId })
     })
       .then(function (r) {
         if (!r.ok) { throw new Error('HTTP ' + r.status); }
@@ -1124,18 +1274,21 @@ body{padding-bottom:calc(58px + env(safe-area-inset-bottom))}
       .then(function (data) {
         esperando.remove();
         if (data && data.status === 'success' && data.response) {
-          agregar(data.response, false);
+          agregar(id, data.response, false);
         } else {
           throw new Error('respuesta inválida');
         }
       })
       .catch(function () {
         esperando.remove();
-        agregar('Disculpe, no pude conectarme en este momento. Puede escribirnos por WhatsApp o escribir por WhatsApp y con gusto lo atendemos.', false);
+        agregar(id, 'Disculpe, no pude conectarme en este momento. Escríbanos por WhatsApp y con gusto lo atendemos.', false);
       })
       .then(function () {
-        bloquear(false);
-        input.focus();
+        e.ocupado = false;
+        if (id === actual) {
+          controles();
+          input.focus();
+        }
       });
   }
 })();
