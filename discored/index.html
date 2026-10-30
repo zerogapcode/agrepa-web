@@ -30,7 +30,7 @@ html, body {
   height: 100%;
   background: var(--asfalto);
   color: var(--texto);
-  font-family: 'Barlow', 'Helvetica Neue', Arial, sans-serif;
+  font-family: "Barlow", "Helvetica Neue", Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 .franja {
@@ -59,7 +59,7 @@ html, body {
   box-shadow: 0 24px 64px rgba(0, 0, 0, 0.75);
 }
 .lbl {
-  font-family: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+  font-family: "Barlow Condensed", "Arial Narrow", sans-serif;
   text-transform: uppercase;
   letter-spacing: 0.15em;
   font-weight: 600;
@@ -69,7 +69,7 @@ html, body {
 }
 h1 {
   margin: 0 0 12px;
-  font-family: 'Archivo Black', 'Arial Black', Impact, sans-serif;
+  font-family: "Archivo Black", "Arial Black", Impact, sans-serif;
   font-weight: 400;
   font-size: 1.85rem;
   line-height: 1.05;
@@ -90,7 +90,7 @@ p {
   background: var(--asfalto);
   border: 1px solid var(--borde);
   border-left: 3px solid var(--ambar);
-  font-family: 'Barlow Condensed', sans-serif;
+  font-family: "Barlow Condensed", sans-serif;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   font-size: 0.9rem;
@@ -119,7 +119,7 @@ p {
   justify-content: center;
   min-height: 50px;
   padding: 14px 22px;
-  font-family: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+  font-family: "Barlow Condensed", "Arial Narrow", sans-serif;
   text-transform: uppercase;
   letter-spacing: 0.13em;
   font-weight: 700;
@@ -163,47 +163,10 @@ p {
   </section>
 </main>
 <script>
-(async function () {
+(function () {
   const params = new URLSearchParams(window.location.search);
-  const targetPath = params.has('clave') || params.has('password') ? '/settings/profile' : '/login';
-  const permanentBase = 'https://discored.agrepasfalcem.com';
-  const estadoEl = document.getElementById('txt-estado');
-  const btnCloud = document.getElementById('btn-cloud');
-  const btnPwd = document.getElementById('btn-pwd');
-
-  // 1. Verificar si el DNS del dispositivo (p.ej. iPhone) ya propagó discored.agrepasfalcem.com
-  try {
-    const ctrl = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), 2200);
-    await fetch(permanentBase + '/static/img/icons/favicon.svg?t=' + Date.now(), {
-      mode: 'no-cors',
-      cache: 'no-store',
-      signal: ctrl.signal
-    });
-    clearTimeout(timer);
-    window.location.replace(permanentBase + targetPath);
-    return;
-  } catch (_) {
-    // El DNS del operador aún está propagando el cambio de Nameservers (ventana 24-48h)
-  }
-
-  // 2. Respaldo automático vía endpoint.json mientras termina la propagación DNS en ese operador
-  try {
-    if (estadoEl) estadoEl.textContent = 'ENLAZANDO RUTA DE TRANSICIÓN DNS…';
-    const resp = await fetch('./endpoint.json?t=' + Date.now(), { cache: 'no-store' });
-    if (resp.ok) {
-      const data = await resp.json();
-      const fallbackBase = (data.fallback_url || data.url || '').replace(/\/+$/, '');
-      if (fallbackBase && fallbackBase.startsWith('https://')) {
-        if (btnCloud) btnCloud.href = fallbackBase + '/login';
-        if (btnPwd) btnPwd.href = fallbackBase + '/settings/profile';
-        window.location.replace(fallbackBase + targetPath);
-        return;
-      }
-    }
-  } catch (_) {}
-
-  window.location.replace(permanentBase + targetPath);
+  const targetPath = params.has("clave") || params.has("password") ? "/settings/profile" : "/login";
+  window.location.replace("https://discored.agrepasfalcem.com" + targetPath);
 })();
 </script>
 </body>
