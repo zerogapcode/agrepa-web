@@ -1,7 +1,5 @@
 User-agent: *
 Allow: /
-Disallow: /nube/
-Disallow: /servidor/
 Disallow: /discored/
 
 Sitemap: https://agrepasfalcem.com/sitemap.xml
