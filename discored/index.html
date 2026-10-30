@@ -156,34 +156,18 @@ p {
       <span id="txt-estado">CONECTANDO CON EL SERVIDOR…</span>
     </div>
     <div class="acciones">
-      <a id="btn-cloud" class="btn btn--primario" href="https://skirt-dist-paid-become.trycloudflare.com/login">ENTRAR A MIS ARCHIVOS</a>
-      <a id="btn-pwd" class="btn btn--linea" href="https://skirt-dist-paid-become.trycloudflare.com/settings/profile">🔑 CAMBIAR MI CONTRASEÑA</a>
+      <a id="btn-cloud" class="btn btn--primario" href="https://discored.agrepasfalcem.com/login">ENTRAR A MIS ARCHIVOS</a>
+      <a id="btn-pwd" class="btn btn--linea" href="https://discored.agrepasfalcem.com/settings/profile">🔑 CAMBIAR MI CONTRASEÑA</a>
       <a id="btn-lan" class="btn btn--linea" href="http://192.168.1.167:8080/login">ENTRAR EN RED LOCAL (LAN)</a>
     </div>
   </section>
 </main>
 <script>
-(async function () {
-  const txt = document.getElementById('txt-estado');
-  const btnCloud = document.getElementById('btn-cloud');
-  const btnPwd = document.getElementById('btn-pwd');
+(function () {
   const params = new URLSearchParams(window.location.search);
   const targetPath = params.has('clave') || params.has('password') ? '/settings/profile' : '/login';
-  let cloudUrl = 'https://skirt-dist-paid-become.trycloudflare.com';
-  try {
-    const res = await fetch('/discored/endpoint.json?t=' + Date.now(), { cache: 'no-store' });
-    if (res.ok) {
-      const data = await res.json();
-      if (data && data.url) {
-        cloudUrl = data.url.replace(/\/+$/, '');
-        btnCloud.href = cloudUrl + '/login';
-        btnPwd.href = cloudUrl + '/settings/profile';
-      }
-    }
-  } catch (_) {}
-
-  txt.textContent = 'REDIRIGIENDO A DISCORED // 7.3TB…';
-  window.location.replace(cloudUrl + targetPath);
+  const targetUrl = 'https://discored.agrepasfalcem.com' + targetPath;
+  window.location.replace(targetUrl);
 })();
 </script>
 </body>
